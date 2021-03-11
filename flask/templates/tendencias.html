@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block title %}
+  Tweets en Quito
+{% endblock %}
+{% block content %}
+
+<style>
+  .jumbotron {
+    background-color: #c7e8f0;
+
+  }
+</style>
+
+
+<div class="container">
+    <section class="jumbotron">
+          <h6 style="position:relative; left:1px; top:0px"> {{datos.titulo}} </h6>
+  
+          <div class="container1">
+              <p class="lead text-muted; text-justify: inter-word">
+                  {{datos.descripcion}}
+              </p>
+          </div>
+    {{data}}
+  
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 ">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">{{datos.tabs.tab1_name}}</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">{{datos.tabs.tab2_name}}</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">{{datos.tabs.tab3_name}}</a>
+              </div>
+            </div>
+        
+              <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+
+              <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <p>
+                    <h5 style="align-self: start;"> {{datos.tabs.tab1_map_description}}</h5>
+                  <table id="nube" class="display condensed" width="100%"></table> 
+                </p>
+                <br>
+                <img class="card-img-top" src = "{{datos.imagen}}"/>
+              </div>
+
+
+              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <p>
+                  <h5 style="align-self: start;"> {{datos.tabs.tab2_description}} 
+                    <br>
+                    <br>
+                    <table id="hashtags" class="display condensed" width="70%">
+                    </h5> 
+                    </table>     
+                </p>
+              </div>
+
+          
+              <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+               
+                <div class="container1">
+                  <table id="hashtags" class="display condensed" width="70%">
+                  <p class="lead text-muted; text-justify: inter-word">
+                    <h5 style="align-self: start;">
+                    {{datos.tabs.tab3_description}} 
+                    <br>
+                    <br> 
+                  </h5>
+                  </p>
+                  <canvas id="frecuencias" >
+                 </canvas> 
+                </table>               
+              </div> 
+              <h3 class="jumbotron-heading">Análisis Mensual de Tendencias</h3>
+              <p class="lead text-muted">
+                <h5> Datos correspondientes al mes de {{datos.weeks.datos.mes}} del año {{datos.weeks.datos.anio}}</h5>
+              </p>
+               {% for i in range(0,datos.weeks.len_fechas)%}  
+              <h2 style="text-align:center">{{datos.weeks.datos.titulos[i]}}</h2>
+              <canvas id="tendencias{{i}}"></canvas>
+                {% endfor %}     
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+  </div>
+</section>
+</div>
+
+
+
+<script>
+  var ctx = document.getElementById('frecuencias').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels : [{% for item in datos.labels[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+        datasets: [{
+            label: '# Ecuador',
+            data: [{% for item in datos.valores[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            backgroundColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderWidth: 1,
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});</script>
+
+<script>
+  var ctx = document.getElementById('tendencias0').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels : [{% for item in datos.weeks.labels0[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+        datasets: [{
+            label: '# Ecuador',
+            data: [{% for item in datos.weeks.values0[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            backgroundColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderWidth: 1,
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});</script>
+
+<script>
+  var ctx = document.getElementById('tendencias1').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels : [{% for item in datos.weeks.labels1[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+        datasets: [{
+            label: '# Ecuador',
+            data: [{% for item in datos.weeks.values1[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            backgroundColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderWidth: 1,
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});</script>
+
+<script>
+  var ctx = document.getElementById('tendencias2').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels : [{% for item in datos.weeks.labels2[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+        datasets: [{
+            label: '# Ecuador',
+            data: [{% for item in datos.weeks.values2[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            backgroundColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderWidth: 1,
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});</script>
+
+<script>
+  var ctx = document.getElementById('tendencias3').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels : [{% for item in datos.weeks.labels3[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+        datasets: [{
+            label: '# Ecuador',
+            data: [{% for item in datos.weeks.values3[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            backgroundColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderWidth: 1,
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});</script>
+
+<script>
+  var ctx = document.getElementById('tendencias4').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels : [{% for item in datos.weeks.labels4[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+        datasets: [{
+            label: '# Ecuador',
+            data: [{% for item in datos.weeks.values4[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            backgroundColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderColor: [{% for item in datos.colors[0:60] %}
+             "{{item}}",
+            {% endfor %}],
+            borderWidth: 1,
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});</script>
+
+
+
+{% endblock %}

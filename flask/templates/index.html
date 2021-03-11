@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}
+  Tendencias y Sentimientos en Twitter
+{% endblock %}
+{% block content %}
+
+<style>
+.jumbotron{
+  background-image: url("img_tree.gif"), url("images/sentimen2.jpeg");
+  background-color: #c7e8f0;
+}
+.container1 {
+  text-align: justify;
+  text-justify: inter-word;
+}
+  </style>
+
+<div class="container">
+    <section class="jumbotron">
+        <h3 style="position:relative; left:1px; top:0px"> {{cabecera.titulo}} </h3>
+
+        <div class="container1">
+            <p class="lead text-muted; text-justify: inter-word">
+                {{cabecera.descripcion}}
+            </p>
+        </div>
+
+        <div class="row">
+            {% for opcion in opciones %}
+            <div class="col-md-6">
+                <div class="embed-responsive embed-responsive-item">
+                    <div class="card mb-6 box-shadow">
+                        <div class="card-body">
+                            <img class="card-img-top" src="{{url_for('static',filename=opcion.imagen)}}" class="img-responsive">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a style="color: cadetblue;" > {{opcion.titulo}} </a>
+                            </h5>
+                            <a href="{{opcion.url_destino}}" class="btn btn-info">Mostrar</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

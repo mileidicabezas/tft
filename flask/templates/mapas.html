@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+{% block title %}
+  Tweets en Quito
+{% endblock %}
+{% block content %}
+
+<style>
+  .jumbotron {
+    background-color: #c7e8f0;
+  }
+</style>
+
+<div class="container">
+        <section class="jumbotron">
+          <h3 style="position:relative; left:1px; top:0px"> {{datos.titulo}} </h3>
+  
+          <div class="container1">
+              <p class="lead text-muted; text-justify: inter-word">
+                  {{datos.descripcion}}
+              </p>
+          </div>
+    {{data}}
+    <div class="container">
+        <div class="row">
+          <div class="col-xs-12 ">
+            <nav>
+
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">{{datos.tabs.tab2_name}}</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">{{datos.tabs.tab3_name}}</a>
+                <a class="nav-item nav-link " id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">{{datos.tabs.tab1_name}}</a>
+              </div>
+              </div>
+
+            <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+              <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                  <p>
+                   <h2 style="text-align: center;"></h2> {{datos.tabs.tab1_map_description}}
+                    <table id="map" class="display condensed" width="100%"></table> 
+                 </p>
+                 <br>
+                <img class="card-img-top" src = "{{datos.imagen}}"/>
+              </div>
+
+              <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <p>
+                    <h2 style="text-align: center;"></h2> {{datos.tabs.tab2_description}}
+                    <br>  <br>  <table id="tweets" class="display condensed" width="100%"></table>   
+                </p>
+              </div>
+
+              <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <p><h2 style="text-align: center;"></h2>{{datos.tabs.tab3_description}}
+                  <br>
+                </p>
+                <p>&nbsp;</p>
+                <table>
+                  <th>
+                    <tr>
+                      <td style="text-align: center;"><strong>Hoy</strong></td>
+                      <td style="text-align: center;"><strong>Desde Ayer</strong></td>
+                      <td style="text-align: center;"><strong>Última Semana</strong></td>
+                    </tr>
+                  </th>
+                  <tbody>
+                    <tr>
+                      <td><canvas id="totales_today" width="auto" height="auto"></canvas></td>
+                      <td><canvas id="totales_yesterday" width="auto" height="auto"></canvas></td>
+                      <td><canvas id="totales_week" width="auto" height="auto"></canvas></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  &nbsp;
+                </p>
+                <table>
+                  <th>
+                    <tr>
+                      <td style="text-align: center;"><strong>Último Mes</strong></td>
+                      <td style="text-align: center;"><strong>Último Año</strong></td>
+                      <td style="text-align: center;"><strong>Todas</strong></td>
+                    </tr>
+                  </th>
+                  <tbody>
+                    <tr>
+                      <td><canvas id="totales_month" width="auto" height="auto"></canvas></td>
+                      <td><canvas id="totales_year" width="auto" height="auto"></canvas></td>
+                      <td><canvas id="totales" width="auto" height="auto"></canvas></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+
+            </div>
+            </div>
+
+          </div>
+        </div>
+  </div>
+</section>
+</div>
+
+
+<script>
+  /* Desde el inicio de los tiempos */
+  Chart.defaults.global.responsive = false;
+  var chartData = {
+  labels : [{% for item in datos.labels %}
+             "{{item}}",
+            {% endfor %}],
+  colors : [{% for item in datos.colors %}
+             "{{item}}",
+            {% endfor %}],
+
+  datasets : [{
+      label: '{{ datos.legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1","#C71585", "#FF4500", "#FEDCBA", "#46BFBD"],
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      animateScale : true,
+      data : [
+      {% for item in datos.valores %}
+             {{item}},
+            {% endfor %}
+              ],
+      spanGaps: false
+  }]
+}
+// get chart canvas
+console.log(chartData)
+var ctx = document.getElementById("totales").getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'pie',
+  data: chartData,
+});
+</script>
+
+
+
+<script>
+  /* Hoy */
+ Chart.defaults.global.responsive = false;
+  var chartData = {
+  labels : [{% for item in datos.labels_today %}
+             "{{item}}",
+            {% endfor %}],
+  colors : [{% for item in datos.colors %}
+             "{{item}}",
+            {% endfor %}],
+
+  datasets : [{
+      label: '{{ datos.legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1","#C71585", "#FF4500", "#FEDCBA", "#46BFBD"],
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      animateScale : true,
+      data : [
+      {% for item in datos.valores_today %}
+             {{item}},
+            {% endfor %}
+              ],
+      spanGaps: false
+  }]
+}
+// get chart canvas
+console.log(chartData)
+var ctx = document.getElementById("totales_today").getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'pie',
+  data: chartData,
+});  
+</script>
+
+<script>
+  /* Ayer */
+ Chart.defaults.global.responsive = false;
+  var chartData = {
+  labels : [{% for item in datos.labels_yesterday %}
+             "{{item}}",
+            {% endfor %}],
+  colors : [{% for item in datos.colors %}
+             "{{item}}",
+            {% endfor %}],
+
+  datasets : [{
+      label: '{{ datos.legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1","#C71585", "#FF4500", "#FEDCBA", "#46BFBD"],
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      animateScale : true,
+      data : [
+      {% for item in datos.valores_yesterday %}
+             {{item}},
+            {% endfor %}
+              ],
+      spanGaps: false
+  }]
+}
+// get chart canvas
+console.log(chartData)
+var ctx = document.getElementById("totales_yesterday").getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'pie',
+  data: chartData,
+});  
+</script>
+
+<script>
+  /* semana pasada */
+ Chart.defaults.global.responsive = false;
+  var chartData = {
+  labels : [{% for item in datos.labels_week %}
+             "{{item}}",
+            {% endfor %}],
+  colors : [{% for item in datos.colors %}
+             "{{item}}",
+            {% endfor %}],
+
+  datasets : [{
+      label: '{{ datos.legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1","#C71585", "#FF4500", "#FEDCBA", "#46BFBD"],
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      animateScale : true,
+      data : [
+      {% for item in datos.valores_week %}
+             {{item}},
+            {% endfor %}
+              ],
+      spanGaps: false
+  }]
+}
+// get chart canvas
+console.log(chartData)
+var ctx = document.getElementById('totales_week').getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'pie',
+  data: chartData,
+});  
+
+
+</script>
+
+<script>
+  /* ESte mes*/
+  Chart.defaults.global.responsive = false;
+  var chartData = {
+  labels : [{% for item in datos.labels_month %}
+             "{{item}}",
+            {% endfor %}],
+  colors : [{% for item in datos.colors %}
+             "{{item}}",
+            {% endfor %}],
+
+  datasets : [{
+      label: '{{ datos.legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1","#C71585", "#FF4500", "#FEDCBA", "#46BFBD"],
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      animateScale : true,
+      data : [
+      {% for item in datos.valores_month %}
+             {{item}},
+            {% endfor %}
+              ],
+      spanGaps: false
+  }]
+}
+// get chart canvas
+console.log(chartData)
+var ctx = document.getElementById('totales_month').getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'pie',
+  data: chartData,
+});    
+</script>
+
+<script>
+  /* ESte Año*/
+  Chart.defaults.global.responsive = false;
+  var chartData = {
+  labels : [{% for item in datos.labels_year %}
+             "{{item}}",
+            {% endfor %}],
+  colors : [{% for item in datos.colors %}
+             "{{item}}",
+            {% endfor %}],
+
+  datasets : [{
+      label: '{{ datos.legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1","#C71585", "#FF4500", "#FEDCBA", "#46BFBD"],
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      animateScale : true,
+      data : [
+      {% for item in datos.valores_year %}
+             {{item}},
+            {% endfor %}
+              ],
+      spanGaps: false
+  }]
+}
+// get chart canvas
+console.log(chartData)
+var ctx = document.getElementById('totales_year').getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'pie',
+  data: chartData,
+});    
+</script>
+
+{% endblock %}
