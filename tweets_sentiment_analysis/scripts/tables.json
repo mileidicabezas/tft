@@ -1,0 +1,137 @@
+[{
+    "name":"raw_tweets",
+    "fields":[{
+        "name":"id",
+        "type":"integer",
+        "primary":"True",
+        "auto_increment":"True"
+    },{
+        "name":"user",
+        "type":"text",
+        "required":"True"        
+    },{
+        "name":"lat",
+        "type":"real",
+        "required":"True"
+    },
+    {
+        "name":"long",
+        "type":"real",
+        "required":"True"
+    },
+    {
+        "name":"fec",
+        "type":"date",
+        "required":"True"
+    },
+    {
+        "name":"tweet",
+        "type":"text",
+        "required":"True"
+    },
+    {
+        "name":"tratado",
+        "type":"text"
+    }]
+},
+{
+    "name":"tweets_corpus",
+    "fields":[{
+        "name":"id",
+        "type":"integer",
+        "primary":"True",
+        "auto_increment":"True"
+    },
+    {
+        "name":"content",
+        "type":"text",
+        "required":"True"
+    },
+    {
+        "name":"polarity",
+        "type":"text",
+        "required":"True"
+    },
+    {
+        "name":"agreement",
+        "type":"text"
+    }]
+},
+{
+    "name":"tweets",
+    "fields":[{
+        "name":"id",
+        "type":"integer",
+        "primary":"True",
+        "auto_increment":"True"
+    },{
+        "name":"user",
+        "type":"text",
+        "required":"True"        
+    },{
+        "name":"lat",
+        "type":"real",
+        "required":"True"
+    },
+    {
+        "name":"long",
+        "type":"real",
+        "required":"True"
+    },
+    {
+        "name":"fec",
+        "type":"date",
+        "required":"True"
+    },
+    {
+        "name":"tweet",
+        "type":"text",
+        "required":"True"
+    },
+    {
+        "name":"polarity",
+        "type":"integer",
+        "required":"True"
+    }]
+},
+{
+    "name":"hashtags",
+    "fields":[{
+        "name":"id",
+        "type":"integer",
+        "primary":"True",
+        "auto_increment":"True"
+    },{
+        "name":"hashtag",
+        "type":"text",
+        "required":"True"
+    },
+    {
+        "name":"num",
+        "type":"integer",
+        "required":"True"
+    }]
+},
+{
+    "name":"hashtags_tweets",
+    "fields":[
+        {
+            "name":"id",
+            "type":"integer",
+            "primary":"True",
+            "auto_increment":"True"
+        },
+        {
+            "name":"hashtag",
+            "type":"text",
+            "required":"True"
+        },
+        {
+            "name":"tweet_id",
+            "type":"integer",
+            "required":"True"
+    
+        }
+        
+    ]
+}]
