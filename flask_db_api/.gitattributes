@@ -1,0 +1,2 @@
+*file.db filter=lfs diff=lfs merge=lfs -text
+*tweets.db filter=lfs diff=lfs merge=lfs -text
