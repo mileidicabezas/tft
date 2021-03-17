@@ -1,4 +1,4 @@
-# final_v_tft
+# tft
 
 After downloading this repository:
 -Create a virtual environment
